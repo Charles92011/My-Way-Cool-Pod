@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>My Way Cool Pod</title>
+        <meta name="author" content="charles.johnson@civi.com" />
+    </head>
+
+    <body>
+		<input type="text" id="txtMessageOut" /><button id="btnSend">Send</button>
+		<br/>
+		<input type="text" id="txtMessageIn" />
+
+		<script type="application/javascript" src="lib/connect_customPodSDK.js"></script>
+		<script type="application/javascript">
+
+			console.log('starting My Way Cool Pod');
+
+			var cpu = ConnectCustomSDK.SyncConnector || {};
+
+			if (cpu) {
+				cpu.init(onConfigured, "com.example.mywaycoolpod", "9.5.001", "connectsdkhook");
+			}
+
+			function onConfigured() {
+
+				const btnSend = document.getElementById('btnSend');
+				btnSend.addEventListener('click', sendMessage);
+				cpu.registerCallback('syncMessageReceived', syncMessageReceived);
+
+				cpu.allowParticipantPublish("message", true);
+
+				console.log("My Way Cool Pod is ready.");
+			};
+
+			function sendMessage(event) {
+			
+				const txtMessageOut = document.getElementById('txtMessageOut');
+				const messageOut = txtMessageOut.value;
+
+				console.log('sending: ' + messageOut);
+				cpu.dispatchSyncMessage('message', messageOut, false, false);
+			}
+
+			function syncMessageReceived(event) {
+
+				if (event.msgNm == "message") {
+					const txtMessageIn = document.getElementById('txtMessageIn');
+					const messageIn = event.msgVal;
+					console.log('message Received:' + messageIn);
+					txtMessageIn.value = messageIn;
+				}
+			}
+
+		</script>
+    </body>
+</html>

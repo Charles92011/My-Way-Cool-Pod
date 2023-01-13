@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<breeze-manifest version="1.0" xmlns="http://breeze.macromedia.com/ns/breeze-manifest" generator="ZB">
+	<document type="custom-pod" id="com.example.mywaycoolpod" version="1.0.001" minimumConnectMobileVersion="2.4" minimumSDKversion="9.4.002" minimumConnectServerVersion="9.4.2"/>
+	<assets>
+		<asset type="document-view">
+			<entry href="MyWayCoolPod_html5.htm" href-html5="MyWayCoolPod_html5.htm" />
+			<file href="MyWayCoolPod_html5.htm"/>
+			<file href="lib/"/>
+			<file href="lib/connect_customPodSDK.js"/>
+		</asset>
+	</assets>
+</breeze-manifest>
