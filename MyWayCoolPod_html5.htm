@@ -7,30 +7,40 @@
     </head>
 
     <body>
-		<input type="text" id="txtMessageOut" /><button id="btnSend">Send</button>
-		<br/>
-		<input type="text" id="txtMessageIn" />
+		<p>
+			<input type="text" id="txtMessageOut" /><button id="btnSend">Send</button>
+		</p>
+		<p><span id="spanLog">log...</span></p>
 
 		<script type="application/javascript" src="lib/connect_customPodSDK.js"></script>
 		<script type="application/javascript">
 
-			console.log('starting My Way Cool Pod');
+			log('Starting My Way Cool Pod');
 
-			var cpu = ConnectCustomSDK.SyncConnector || {};
+			const syncConnector = ConnectCustomSDK.SyncConnector || {};
 
-			if (cpu) {
-				cpu.init(onConfigured, "com.example.mywaycoolpod", "9.5.001", "connectsdkhook");
+			if (syncConnector) {
+				syncConnector.init(onConfigured, "com.example.mywaycoolpod", "9.5.001", "connectsdkhook");
 			}
 
 			function onConfigured() {
 
 				const btnSend = document.getElementById('btnSend');
 				btnSend.addEventListener('click', sendMessage);
-				cpu.registerCallback('syncMessageReceived', syncMessageReceived);
+				
+				
+				syncConnector.registerCallback('syncMessageReceived', syncMessageReceived);
+				syncConnector.registerCallback("userJoined", userJoined); 
+				syncConnector.registerCallback("userLeft", userLeft); 
+				syncConnector.registerCallback("userDetailsChanged", userDetailsChanged); 
+				syncConnector.registerCallback("userStatusChanged", userStatusChanged); 
+				syncConnector.registerCallback("roleChanged", roleChanged); 
+				syncConnector.registerCallback("caughtUp",caughtUp); 
+				syncConnector.registerCallback("update", breakOutSession);
 
-				cpu.allowParticipantPublish("message", true);
+				syncConnector.allowParticipantPublish("message", true);
 
-				console.log("My Way Cool Pod is ready.");
+				log("My Way Cool Pod is ready.");
 			};
 
 			function sendMessage(event) {
@@ -38,19 +48,30 @@
 				const txtMessageOut = document.getElementById('txtMessageOut');
 				const messageOut = txtMessageOut.value;
 
-				console.log('sending: ' + messageOut);
-				cpu.dispatchSyncMessage('message', messageOut, false, false);
+				log('Sending Message: ' + messageOut);
+				syncConnector.dispatchSyncMessage('message', messageOut, false, false);
 			}
 
+			function log(message) {
+				const spanLog = document.getElementById('spanLog');
+				spanLog.innerHTML = spanLog.innerHTML + ('<br/>' + message);
+			}
+			
 			function syncMessageReceived(event) {
 
 				if (event.msgNm == "message") {
-					const txtMessageIn = document.getElementById('txtMessageIn');
-					const messageIn = event.msgVal;
-					console.log('message Received:' + messageIn);
-					txtMessageIn.value = messageIn;
+					log('Message Received:' + event.msgVal);
 				}
 			}
+			
+			function userJoined(event) {log('User Joined');}
+			function userLeft(event) {log('User Left');}
+			function userDetailsChanged(event) {log('User Details Changed');}
+			function userStatusChanged(event) {log('User Status Changed');}
+			function roleChanged(event) {log('Role Changed');}
+			function caughtUp(event) {log('Caught Up');}
+			function breakOutSession(event) {log('Break Out Session');}
+			
 
 		</script>
     </body>
