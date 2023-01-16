@@ -80,7 +80,10 @@
 				}
 			}
 			
-			function userJoined(event) {log('User Joined');}
+			function userJoined(event) {
+				log('User Joined');
+				log(JSON.stringify(event));
+			}
 			function userLeft(event) {log('User Left');}
 			function userDetailsChanged(event) {log('User Details Changed');}
 			function userStatusChanged(event) {log('User Status Changed');}
