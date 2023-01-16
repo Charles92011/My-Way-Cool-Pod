@@ -10,6 +10,9 @@
 		<p>
 			<input type="text" id="txtMessageOut" /><button id="btnSend">Send</button>
 		</p>
+		<p>
+			<button id="btnGetConfig">GetConfig</button>
+		</p>
 		<p><span id="spanLog">log...</span></p>
 
 		<script type="application/javascript" src="lib/connect_customPodSDK.js"></script>
@@ -27,6 +30,8 @@
 
 				const btnSend = document.getElementById('btnSend');
 				btnSend.addEventListener('click', sendMessage);
+				document.getElementById('btnGetConfig').addEventListener('click', getConfig);
+				
 				
 				
 				syncConnector.registerCallback('syncMessageReceived', syncMessageReceived);
@@ -42,6 +47,17 @@
 
 				log("My Way Cool Pod is ready.");
 			};
+
+			function getConfig(event) {
+			
+				const config = syncConnector.getConfig();
+			
+				log(JSON.stringify(config));
+			
+			}
+
+
+
 
 			function sendMessage(event) {
 			
